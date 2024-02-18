@@ -3,8 +3,8 @@ import { matchData } from "src/utils/matchData";
 import { useEffect, useState } from "react";
 import { Item } from "src/global";
 import Cards from "../modules/Cards";
-import { fetchCsv } from "../../utils/getCsvData";
 import Link from "next/link";
+import { fetchCsv } from "@/utils/getCsvData";
 export default function HomeView() {
   const [matches, setMatches] = useState<{ [key: string]: Item[] }>({});
 
@@ -18,9 +18,11 @@ export default function HomeView() {
 
   useEffect(() => {
     const matchesLocal = localStorage.getItem("matches");
+    const sessionInvestors = sessionStorage.getItem("investors");
     if (matchesLocal) {
-      console.log(matchesLocal);
-      setMatches(JSON.parse(matchesLocal));
+      const parsedMatchesLocal = JSON.parse(matchesLocal);
+      const parsedSessionInvestors = JSON.parse(sessionInvestors ?? "{}");
+      setMatches({ ...parsedMatchesLocal, ...parsedSessionInvestors });
     } else {
       fetchData();
     }
