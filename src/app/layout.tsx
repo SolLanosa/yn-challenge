@@ -19,7 +19,7 @@ export default function RootLayout({
       <body
         className={cn(
           inter.className,
-          "bg-gradient-to-r from-[#eeaeca] to-[#94bbe9]"
+          "bg-gradient-to-r from-[#e5e6d3] from-10% via-[#e8bdd0] via-40% to-[#e5e6d3] to-90% "
         )}
       >
         {children}

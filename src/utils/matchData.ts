@@ -1,13 +1,13 @@
-import { Item } from "src/global";
+import { Startup, RawInvestor, Investor } from "src/types";
 
-export const matchData = (investors: Item[], startups: Item[]) => {
-  const newMatches: { [key: string]: Item[] } = {};
+export const matchData = (investors: RawInvestor[], startups: Startup[]) => {
+  const newMatches: { [key: string]: Investor } = {};
 
   investors.forEach((investor) => {
     const investorName = investor.name;
     const industryPreference = investor.industry;
 
-    let matchedStartups: Item[] = [];
+    let matchedStartups: Startup[] = [];
     if (industryPreference === "any") {
       matchedStartups = startups.slice(0, 10);
     } else {
@@ -16,8 +16,14 @@ export const matchData = (investors: Item[], startups: Item[]) => {
         .slice(0, 10);
     }
 
-    newMatches[investorName] = matchedStartups;
+    newMatches[investorName] = {
+      name: investorName,
+      industry: industryPreference,
+      startups: matchedStartups,
+      deletedStartups: [],
+      originalName: investorName,
+    };
   });
 
-  return newMatches;
+  return Object.values(newMatches);
 };

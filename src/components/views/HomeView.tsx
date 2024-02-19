@@ -1,40 +1,43 @@
 "use client";
-import { matchData } from "src/utils/matchData";
-import { useEffect, useState } from "react";
-import { Item } from "src/global";
+import { useFetchInvestors } from "src/hooks/useFetchInvestors";
 import Cards from "../modules/Cards";
 import Link from "next/link";
-import { fetchCsv } from "@/utils/getCsvData";
+import ReactPaginate from "react-paginate";
+import { useState } from "react";
+
 export default function HomeView() {
-  const [matches, setMatches] = useState<{ [key: string]: Item[] }>({});
-
-  const fetchData = async () => {
-    const investors = await fetchCsv("/investors.csv");
-    const startups = await fetchCsv("/startups.csv");
-    const industryMatches = matchData(investors, startups);
-    setMatches(industryMatches);
-    localStorage.setItem("matches", JSON.stringify(industryMatches));
+  const investors = useFetchInvestors();
+  const [itemOffset, setItemOffset] = useState(0);
+  const endOffset = itemOffset + 10;
+  const currentItems = investors.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(investors.length / 10);
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * 10) % investors.length;
+    setItemOffset(newOffset);
   };
-
-  useEffect(() => {
-    const matchesLocal = localStorage.getItem("matches");
-    const sessionInvestors = sessionStorage.getItem("investors");
-    if (matchesLocal) {
-      const parsedMatchesLocal = JSON.parse(matchesLocal);
-      const parsedSessionInvestors = JSON.parse(sessionInvestors ?? "{}");
-      setMatches({ ...parsedMatchesLocal, ...parsedSessionInvestors });
-    } else {
-      fetchData();
-    }
-  }, []);
-
   return (
-    <div>
-      <h1 className="text-center">Match</h1>
-      <Link href={"/investor/new"} className="border rounded">
-        Add Investor
+    <div className="flex flex-col items-center justify-center">
+      <h1 className="text-center font-medium text-4xl mb-8">
+        Get to know our investors
+      </h1>
+      <Link
+        href={"/investor/new"}
+        className=" bg-[#bf5baa5c] rounded-lg mb-8 py-4 px-6 hover:bg-[#ffffff42] font-light"
+      >
+        Add NEW Investor
       </Link>
-      <Cards matches={matches} />
+      <Cards investors={currentItems} />
+      <ReactPaginate
+        breakLabel="..."
+        nextLabel="next >"
+        onPageChange={handlePageClick}
+        pageRangeDisplayed={5}
+        pageCount={pageCount}
+        previousLabel="< previous"
+        renderOnZeroPageCount={null}
+        className="w-full flex justify-center mt-20"
+        pageClassName="mx-3"
+      />
     </div>
   );
 }

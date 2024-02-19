@@ -1,9 +1,9 @@
 import Papa from "papaparse";
 
-import { Item } from "src/global";
+import { RawInvestor, Startup } from "src/types";
 
-const formatData = (data: Item[]) => {
-  return data.map((item: Item) => {
+const formatData = (data: RawInvestor[] | Startup[]) => {
+  return data.map((item: RawInvestor) => {
     const array = Object.values(item);
     return {
       name: array[0],
