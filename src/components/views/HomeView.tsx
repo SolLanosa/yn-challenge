@@ -6,7 +6,7 @@ import ReactPaginate from "react-paginate";
 import { useState } from "react";
 
 export default function HomeView() {
-  const investors = useFetchInvestors();
+  const { investors, isLoading } = useFetchInvestors();
   const [itemOffset, setItemOffset] = useState(0);
   const endOffset = itemOffset + 10;
   const currentItems = investors.slice(itemOffset, endOffset);
@@ -15,6 +15,11 @@ export default function HomeView() {
     const newOffset = (event.selected * 10) % investors.length;
     setItemOffset(newOffset);
   };
+
+  if (isLoading) {
+    return <div>...isLoading</div>;
+  }
+
   return (
     <div className="flex flex-col items-center justify-center">
       <h1 className="text-center font-medium text-4xl mb-8">
@@ -35,8 +40,11 @@ export default function HomeView() {
         pageCount={pageCount}
         previousLabel="< previous"
         renderOnZeroPageCount={null}
-        className="w-full flex justify-center mt-20"
-        pageClassName="mx-3"
+        className="w-full flex justify-center mt-20 items-center"
+        pageClassName="mx-2"
+        activeLinkClassName="bg-[#8559594f] p-2 rounded-md"
+        previousClassName="bg-[#8559594f] p-2 rounded-md mr-6"
+        nextClassName="bg-[#8559594f] p-2 rounded-md ml-6"
       />
     </div>
   );

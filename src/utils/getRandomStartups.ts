@@ -1,4 +1,4 @@
-const generateRandomStartup = () => {
+export const generateRandomStartup = () => {
   const categories = ["bio", "internet", "environment"];
   const industry = categories[Math.trunc(Math.random() * categories.length)];
 

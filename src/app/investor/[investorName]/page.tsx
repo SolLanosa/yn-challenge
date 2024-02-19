@@ -1,53 +1,26 @@
 "use client";
+import { addStartup } from "@/utils/addStartup";
+import { deleteStartup } from "@/utils/deleteStartup";
+import { updateName } from "@/utils/updateName";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useFetchInvestors } from "src/hooks/useFetchInvestors";
+import { Investor } from "src/types";
 
 export default function InvestorPage() {
   const [updatedName, setUpdatedName] = useState("");
-  const router = useRouter();
   const params = useParams<{ investorName: string }>();
-  const investors = useFetchInvestors();
+  const router = useRouter();
+  const { investors, isLoading, refetch } = useFetchInvestors();
+
   const investor = investors.find(
     (investor) => investor.name === params.investorName
   );
 
-  const updateName = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    const sessionInvestors = sessionStorage.getItem("investors");
-
-    if (sessionInvestors) {
-      const investorsParsed = JSON.parse(sessionInvestors ?? "[]");
-      sessionStorage.setItem(
-        "investors",
-        JSON.stringify([
-          ...investorsParsed,
-          {
-            name: updatedName,
-            industry: investor?.industry,
-            startups: investor?.startups,
-            originalName: investor?.originalName,
-            deletedStartups: investor?.deletedStartups,
-          },
-        ])
-      );
-    } else {
-      sessionStorage.setItem(
-        "investors",
-        JSON.stringify([
-          {
-            name: updatedName,
-            industry: investor?.industry,
-            startups: investor?.startups,
-            deletedStartups: investor?.deletedStartups,
-            originalName: investor?.originalName,
-          },
-        ])
-      );
-    }
-    router.push("/");
-  };
+  if (isLoading) {
+    return <div>...isLoading</div>;
+  }
 
   return (
     <main className="flex w-full flex-col  justify-center items-center pb-6">
@@ -65,7 +38,7 @@ export default function InvestorPage() {
         <button
           disabled={!updatedName}
           className=" bg-[#ffffff5c] w-24 px-1.5 py-1 rounded-xl disabled:cursor-no-drop"
-          onClick={updateName}
+          onClick={(e) => updateName(e, updatedName, investor!, router)}
         >
           Submit
         </button>
@@ -87,13 +60,31 @@ export default function InvestorPage() {
                 <li className="font-extralight">
                   {index + 1}. {startup.name} - {startup.industry}
                 </li>
-                <button className="border w-24 p-px rounded-xl ml-4 font-extralight">
+                <button
+                  className="border w-24 p-px rounded-xl ml-4 font-extralight"
+                  onClick={() => {
+                    deleteStartup(
+                      {
+                        name: startup.name,
+                        industry: startup.industry,
+                      },
+                      investor!
+                    );
+                    refetch();
+                  }}
+                >
                   Delete
                 </button>
               </div>
             ))}
             {investor?.startups.length! < 10 && (
-              <button className="border w-24 px-1.5 py-1 rounded-xl font-extralight">
+              <button
+                className="border w-24 px-1.5 py-1 rounded-xl font-extralight"
+                onClick={() => {
+                  addStartup(investor!);
+                  refetch();
+                }}
+              >
                 Add startup
               </button>
             )}
