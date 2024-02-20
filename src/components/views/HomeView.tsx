@@ -27,24 +27,25 @@ export default function HomeView() {
       </h1>
       <Link
         href={"/investor/new"}
-        className=" bg-[#bf5baa5c] rounded-lg mb-8 py-4 px-6 hover:bg-[#ffffff42] font-light"
+        className="border-[#bf5baa5c] border rounded-full mb-8 py-4 px-6 hover:bg-[#bf5baa5c] font-light"
       >
         Add NEW Investor
       </Link>
       <Cards investors={currentItems} />
       <ReactPaginate
         breakLabel="..."
-        nextLabel="next >"
+        nextLabel="Next >"
         onPageChange={handlePageClick}
-        pageRangeDisplayed={5}
+        pageRangeDisplayed={3}
+        marginPagesDisplayed={1}
         pageCount={pageCount}
-        previousLabel="< previous"
+        previousLabel="< Prev"
         renderOnZeroPageCount={null}
-        className="w-full flex justify-center mt-20 items-center"
+        className="w-full flex justify-center mt-20 items-center font-extralight"
         pageClassName="mx-2"
-        activeLinkClassName="bg-[#8559594f] p-2 rounded-md"
-        previousClassName="bg-[#8559594f] p-2 rounded-md mr-6"
-        nextClassName="bg-[#8559594f] p-2 rounded-md ml-6"
+        activeLinkClassName="border border-[#bf5baa5c] rounded-full hover:bg-[#bf5baa5c] p-2 rounded-md"
+        previousClassName="border border-[#bf5baa5c] rounded-full hover:bg-[#bf5baa5c] p-2 rounded-md mr-6 max-md:mr-1"
+        nextClassName=" border border-[#bf5baa5c] rounded-full hover:bg-[#bf5baa5c] p-2 rounded-md ml-6 max-md:ml-1"
       />
     </div>
   );

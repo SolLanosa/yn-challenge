@@ -39,5 +39,5 @@ export const updateName = (
       ])
     );
   }
-  router.push("/");
+  router.push(`/investor/${updatedName}`);
 };
