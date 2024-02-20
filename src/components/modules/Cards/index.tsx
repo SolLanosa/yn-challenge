@@ -13,7 +13,10 @@ export default function Cards({ investors }: CardsProps) {
           key={investor.name}
           className="bg-[#ffffff5c] rounded-lg p-4 m-auto mb-4 mx-1.5 max-md:w-[90%] "
         >
-          <Card investorName={investor.name} />
+          <Card
+            investorName={investor.name}
+            investorIndustry={investor.industry}
+          />
         </div>
       ))}
     </div>

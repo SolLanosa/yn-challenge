@@ -1,4 +1,6 @@
 "use client";
+import Button from "@/components/atoms/Button";
+import InputText from "@/components/atoms/InputText";
 import { addStartup } from "@/utils/addStartup";
 import { deleteStartup } from "@/utils/deleteStartup";
 import { updateName } from "@/utils/updateName";
@@ -25,22 +27,17 @@ export default function InvestorPage() {
     <main className="flex w-full flex-col  justify-center items-center pb-6">
       <h1 className="my-6 font-medium text-4xl">{investor?.name}</h1>
       <form className="flex flex-col w-full justify-center items-center bg-[#ffffff5c] max-w-xl rounded-xl p-3 max-md:max-w-full max-md:w-[90%]">
-        <label htmlFor="update" className="mb-4 text-lg font-extralight">
-          Do you wish to update your name?
-        </label>
-        <input
-          className="mb-4 p-2 border border-[#bf5baa5c] rounded-full"
-          type="text"
+        <InputText
           id="update"
+          label="Do you wish to update your name?"
           onChange={(e) => setUpdatedName(e.target.value)}
         />
-        <button
+        <Button
           disabled={!updatedName}
-          className=" bg-[#ffffff5c] w-24 px-1.5 py-1 rounded-full disabled:cursor-no-drop border border-[#bf5baa5c]"
           onClick={(e) => updateName(e, updatedName, investor!, router)}
         >
           Submit
-        </button>
+        </Button>
       </form>
       <div className="my-6">
         <span className="text-lg font-extralight">
@@ -59,8 +56,8 @@ export default function InvestorPage() {
                 <li className="font-extralight">
                   {index + 1}. {startup.name} - {startup.industry}
                 </li>
-                <button
-                  className="border w-24 p-px rounded-full ml-4 font-extralight border-[#bf5baa5c]"
+                <Button
+                  className="font-extralight ml-4"
                   onClick={() => {
                     deleteStartup(
                       {
@@ -73,19 +70,19 @@ export default function InvestorPage() {
                   }}
                 >
                   Delete
-                </button>
+                </Button>
               </div>
             ))}
             {investor?.startups.length! < 10 && (
-              <button
-                className="border border-[#bf5baa5c] rounded-full px-1.5 py-1 font-extralight w-32"
+              <Button
+                className="font-extralight w-32"
                 onClick={() => {
                   addStartup(investor!);
                   refetch();
                 }}
               >
                 Add startup
-              </button>
+              </Button>
             )}
           </ul>
         </div>
