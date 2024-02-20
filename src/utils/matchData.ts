@@ -4,6 +4,8 @@ export const matchData = (investors: RawInvestor[], startups: Startup[]) => {
   const newMatches: { [key: string]: Investor } = {};
   let matchedStartups: Startup[] = [];
 
+  // Sort investors in descending order by industry (from Z to A) to prioritize those with specific interests,
+  // ensuring that startups can be matched with the investors with specific interests first.
   const investorsSorted = investors.sort((a, b) => {
     const nameA = a.industry.toUpperCase();
     const nameB = b.industry.toUpperCase();

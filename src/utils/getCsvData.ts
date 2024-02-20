@@ -15,10 +15,10 @@ const formatData = (data: RawInvestor[] | Startup[]) => {
 export const fetchCsv = async (filePath: string) => {
   const response = await fetch(filePath);
   const reader = response.body!.getReader();
-  const result = await reader.read();
+  const result = await reader.read(); // raw array
   const decoder = new TextDecoder("utf-8");
-  const csvString = decoder.decode(result.value!);
-  const { data } = Papa.parse(csvString, {});
-  const newData = formatData(data);
+  const csvString = decoder.decode(result.value!); // the csv text
+  const { data } = Papa.parse(csvString, {}); // object with { data, errors, meta }
+  const newData = formatData(data); // array of objects
   return newData;
 };

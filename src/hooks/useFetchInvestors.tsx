@@ -20,7 +20,6 @@ export const useFetchInvestors = () => {
     try {
       const localInvestors = localStorage.getItem("investors");
       const sessionInvestors = sessionStorage.getItem("investors");
-
       if (localInvestors) {
         const parsedLocalInvestors = JSON.parse(localInvestors);
         const parsedSessionInvestors = JSON.parse(sessionInvestors ?? "[]");
@@ -29,17 +28,21 @@ export const useFetchInvestors = () => {
             ({ originalName }: Investor) => originalName
           )
         );
+        // First we filtered the duplicates in localStorage that already are in stored in sessionStorage
         const filteredDuplicateLocalInvestors = parsedLocalInvestors.filter(
           ({ originalName }: Investor) =>
             !setOriginalNameSessionInvestors.has(originalName)
         );
 
+        // Using originalName as id
+        // TODO: Utilizing originalName as the identifier is not ideal, as it may lead to issues with duplicate investors sharing the same name. Should change
         let sessionInvestorsObj: { [key: string]: Investor } = {};
 
         parsedSessionInvestors.forEach((obj: Investor) => {
           sessionInvestorsObj[obj.originalName] = obj;
         });
 
+        //Filtered duplicates inside sessionStorage
         const filteredDuplicateSessionInvestors =
           Object.values(sessionInvestorsObj);
 
